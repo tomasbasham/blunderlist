@@ -1,0 +1,35 @@
+steps:
+
+  # Build the assets.
+- name: eu.gcr.io/$PROJECT_ID/ember:3.7.1
+  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+    npm install
+    ember build --prod
+
+  # Push the assets to Cloud Storage.
+- name: gcr.io/cloud-builders/gsutil
+  args: [
+    '-h', 'Cache-Control:public, max-age=86400',
+    '-m',
+    'cp',
+    '-r',
+    '-a', 'public-read',
+    '-z', 'js,css,map',
+    '*',
+    'gs://blunderlist',
+  ]
+  dir: 'dist'
+
+  # Deploy release to Kubernetes Engine.
+- name: gcr.io/$PROJECT_ID/helm
+  args: [
+    'upgrade', 'blunderlist-frontend', 'chart/frontend',
+    '--namespace', 'blunderlist',
+    '--install'
+  ]
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=europe-west2-b'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=istio-cluster'
