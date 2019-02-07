@@ -30,3 +30,14 @@ Create chart name and version as used by the chart label.
 {{- define "frontend.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Expand the image of the chart.
+*/}}
+{{- define "frontend.image" -}}
+{{- if .Values.image.digest -}}
+{{- printf "%s@sha256:%s" .Values.image.repository .Values.image.digest -}}
+{{- else -}}
+{{- printf "%s:%s" .Values.image.repository .Values.image.tag -}}
+{{- end -}}
+{{- end -}}

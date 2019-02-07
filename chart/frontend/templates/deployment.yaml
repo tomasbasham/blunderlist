@@ -26,7 +26,7 @@ spec:
           name: nginx
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ include "frontend.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
         - name: nginx

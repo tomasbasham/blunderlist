@@ -6,6 +6,7 @@ replicaCount: 2
 image:
   repository: nginx
   tag: alpine
+  digest: e0292d158b6b353fde34909243a4886977cb9d1abb8a8a5fef9e0ff7138dd3e2
   pullPolicy: IfNotPresent
 
 nameOverride: ""
