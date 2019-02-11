@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx
+  labels:
+    app.kubernetes.io/name: {{ include "frontend.name" . }}
+    helm.sh/chart: {{ include "frontend.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  default.conf: |
+    upstream storage {
+      server storage.googleapis.com:443;
+    }
+
+    server {
+      listen      80;
+      server_name _;
+      root        /usr/share/nginx/html;
+
+      if ( $request_method !~ "GET" ) {
+        return 405;
+      }
+
+      location /healthz {
+        return 200;
+      }
+
+      # Specifically rewrite the root path to /index.html which is the document
+      # used to render the application. The last flag on the rewrite stops
+      # processing the current set of ngx_http_rewrite_module directives and
+      # starts a search for a new location matching the changed URI.
+      location = / {
+        rewrite ^ /index.html last;
+      }
+
+      # Proxy all other requests through to Google Cloud Storage.
+      location / {
+        proxy_set_header  Host storage.googleapis.com;
+        proxy_set_header  X-Realt-IP \$remote_addr;
+        proxy_set_header  X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_pass        https://storage/blunderlist$uri;
+
+        proxy_redirect    off;
+        port_in_redirect  off;
+
+        proxy_intercept_errors on;
+
+        proxy_hide_header alt-svc;
+        proxy_hide_header X-GUploader-UploadID;
+        proxy_hide_header alternate-protocol;
+        proxy_hide_header x-goog-hash;
+        proxy_hide_header x-goog-generation;
+        proxy_hide_header x-goog-metageneration;
+        proxy_hide_header x-goog-stored-content-encoding;
+        proxy_hide_header x-goog-stored-content-length;
+        proxy_hide_header x-goog-storage-class;
+        proxy_hide_header x-xss-protection;
+        proxy_hide_header accept-ranges;
+        proxy_hide_header Set-Cookie;
+
+        proxy_ignore_headers Set-Cookie;
+      }
+    }

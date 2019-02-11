@@ -1,0 +1,16 @@
+# Default values for blunderlist-frontend.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: alpine
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  port: 8080
+  type: ClusterIP
