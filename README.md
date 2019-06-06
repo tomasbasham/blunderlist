@@ -1,4 +1,4 @@
-# blunderlist [![Build Status](https://travis-ci.com/tomasbasham/blunderlist-frontend.svg?branch=master)](https://travis-ci.com/tomasbasham/blunderlist-frontend) [![Maintainability](https://api.codeclimate.com/v1/badges/428e6cae5d8321a778ed/maintainability)](https://codeclimate.com/github/tomasbasham/blunderlist/maintainability)
+# blunderlist [![Build Status](https://travis-ci.com/tomasbasham/blunderlist-frontend.svg?branch=master)](https://travis-ci.com/tomasbasham/blunderlist-frontend) [![Maintainability](https://api.codeclimate.com/v1/badges/428e6cae5d8321a778ed/maintainability)](https://codeclimate.com/github/tomasbasham/blunderlist/maintainability) [![Pact](https://blunderlist.pact.dius.com.au/pacts/provider/blunderlist-gateway/consumer/blunderlist/latest/badge.svg)](https://blunderlist.pact.dius.com.au)
 
 A fictitious todo application through which to teach how to implement a
 microservice architecture. For the full list of services required to run this

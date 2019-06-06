@@ -17,6 +17,10 @@ env:
   global:
     # See https://git.io/vdao3 for details.
   - JOBS=1
+  - EMBER_CLI_PACT_BROKER=https://blunderlist.pact.dius.com.au/
+  - EMBER_CLI_PACT_TAGS=blunderlist,frontend,production
+    # EMBER_CLI_PACT_BROKER_TOKEN
+  - secure: "MtmkSjvWwKuERWUMHifAeMSFdj/Uybntlpyz5pMSjX/nmkWPAT6SezdHl5s95ep2PY5NdmHRK8u2/t3HBJw9C3j39niXVnwkveXq7/6lrbCv8g1h1Acwjlm5z+Q3kogKClv5cUzh7th5djY56IWhIqfz2W5eN0sCE/J4nvcFqmUa0jFnuajcP6kE0nEgct5XHGwdmQj8wjRyio2ZpyCWPKXFjlj81z2VDpZIcwIRnZDlQ9l6z/N1x5NqLRnuV5hrmC/LncJB+t/9kbXAqi4wR+rTEdjlRvfrRRrKVru69PEf9Ao40hS7EBERj36WB76Co9b6J/MDd3TY/zM4S2R1k2P7qpO8N9o82LVEkgg3zqT2hCczKsfEWGoXQ4NwJYQbYOiZnnSKyzyRYCAsxiYvaMFlMGHniCzrs5m3MEh3InpQ07GMr0bb1juqCte2bFcbC4/9p9HFLe9/Pd0/wdcrZZYHePUqegMxi3l0TyFKtLvxk81Uq+16GNsLdnESO39U3W4hpJEU6KFlwNW62Ch/Fust907b7Pb2fzTSLCjv4kGkEDvDbuDX6hW1UipUg2hclbfP4hx/74gzQcVk2qSRcDKeaA8XOfkgUqWMZZt/4/WN4/p21epYEEKBteWn65NdHj8aJwnRxLQktr7yfbrQS0XFy5IP6L/iuaS4B2R3sKo="
 
 before_install:
 - npm config set spin false
@@ -25,6 +29,9 @@ script:
 - npm run lint:hbs
 - npm run lint:js
 - npm test
+
+after_success:
+- npm run pact:publish
 
 notifications:
   email: false
